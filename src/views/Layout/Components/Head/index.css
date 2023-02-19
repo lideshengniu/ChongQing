@@ -1,0 +1,131 @@
+.container {
+  width: 100vw;
+  background: url("../../imgs/Head.gif") no-repeat center;
+  text-align: center;
+  background-size: 100% 100%;
+  height: 100%;
+}
+.container .container2 {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.container .container2 ul {
+  width: 680px;
+  flex-grow: 0;
+}
+.container .container2 .right {
+  display: flex;
+  flex-grow: 0;
+}
+.container .container2 .right .wheather {
+  height: 100%;
+  width: 100px;
+  flex: 1;
+  display: flex;
+  position: relative;
+  justify-content: space-around;
+  align-self: center;
+}
+.container .container2 .right .wheather::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 136px;
+  width: 0.8px;
+  height: 10vh;
+  border-radius: 1px;
+  background-color: #00aafffd;
+  box-shadow: 0.8px 0.08px 6.4px 5.2px #00aafffd;
+}
+.container .container2 .right .wheather .word {
+  height: 100%;
+  width: 80px;
+  color: #fdf8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container .container2 .right .wheather .word .chinese {
+  font-size: 16px;
+  height: 20px;
+  line-height: 20px;
+}
+.container .container2 .right .wheather .icons {
+  width: 160px;
+  height: 100%;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+.container .container2 .right .wheather .icons .icon-svg {
+  color: #fff4f4;
+  width: 24px;
+  cursor: pointer;
+  font-weight: 900;
+}
+.container .container2 .right .wheather .icons .icon-cloudy {
+  color: rgba(188, 242, 87, 0.878);
+  width: 32px;
+  height: 100%;
+}
+.container .container2 .right .date {
+  flex: 2;
+  position: relative;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.container .container2 .right .date div {
+  height: 100%;
+  width: 240px;
+  margin-right: 72px;
+}
+.container .container2 .right .date .day {
+  font: 500 20px Arial, sans-serif;
+  color: #89feec;
+}
+.container .container2 .right .date .time {
+  font: 700 18px Arial, sans-serif;
+  color: #89feec;
+}
+.container .container2 .right .date::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 200px;
+  width: 0.8px;
+  height: 20px;
+  border-radius: 1px;
+  background-color: #00aafffd;
+  box-shadow: 0.8px 0.08px 6.4px 5.2px #00aafffd;
+}
+.container .container2 .right .user {
+  flex: 2;
+  height: 100%;
+  width: 320px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.container .container2 .right .user .icon-person {
+  width: 48px;
+  margin-top: 0;
+  height: 70%;
+}
+.container .container2 .right .user .person {
+  font: 500 20px Arial, sans-serif;
+  color: #89feec;
+}
+.container .container2 .right .user .Down {
+  margin-right: 50px;
+  width: 24px;
+  height: 100%;
+  margin-top: -8px;
+  color: #89feec;
+  cursor: pointer;
+}
