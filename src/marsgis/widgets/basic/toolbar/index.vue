@@ -1,5 +1,5 @@
 <template>
-  <mars-pannel customClass="base-pannel" right="10" top="10">
+  <mars-pannel customClass="base-pannel" right="10" top="100">
     <template v-for="(item, i) in data" :key="i">
       <div v-if="item.widget && !item.children" class="toolbar-item" @click="showWidget(item.widget)">
         <mars-icon :icon="item.icon" width="18"></mars-icon>

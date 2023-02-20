@@ -7,7 +7,7 @@
   </div>
 </template>
 <script lang='ts' setup>
-import LayoutHead from "./Components/Head copy/index.vue"
+import LayoutHead from "./Components/Head/index.vue"
 import Mars from "@mars/views/index.vue"
 // const configUrl = `${process.env.BASE_URL}config/config.json`
 </script>

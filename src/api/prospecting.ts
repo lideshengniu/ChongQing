@@ -37,7 +37,7 @@ export const addPhoto = (data) => {
     method: "POST",
     url: "/form/upload",
     headers: {
-      "Content-Type": "multipart/form-data;charset=utf-8"
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
    },
     data: formdata
   })

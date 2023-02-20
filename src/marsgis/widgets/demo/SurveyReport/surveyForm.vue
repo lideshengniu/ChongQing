@@ -1,5 +1,5 @@
 <template>
-  <mars-pannel  :visible="visible" title="我的弹窗" width="800" right="350" top="150" bottom="40" zIndex=100>
+  <mars-pannel  :visible="visible" title="我的弹窗" width="800" right="120" top="150" bottom="40" zIndex=100>
     <a-form ref="formRef" :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol" :rules="rules" @finish="finish">
       <a-row :size="size" type="flex" justify="center" :gutter="[0, 16]">
         <a-col :span="8"
@@ -236,7 +236,7 @@ interface FileItem {
   url?: string
   preview?: string
   originFileObj?: any
-  file: string | Blob
+  file?: string | Blob
 }
 // : Ref<FormState>
 const formState = ref({
@@ -377,14 +377,26 @@ const rules = {
   geology: { required: true, message: "Please select Activity zone", trigger: "change" }
 
 }
+// uP photos
 const fileList = ref<FileItem[]>([])
-const beforeUpload = (file) => {
-  // fileList.value = [...fileList.value, file]
-  const formdata = new FormData()
-  for (const k in file) {
-     formdata.append(file, file[file])
-  }
+const photos:string[] = []
+const beforeUpload = async (file) => {
+  console.log(file, "file")
 
+ const a:string = await useForms.addphote(file)
+ formState.value.groundFeatureUrl = a.replace("http://localhost:15130/", "http://1.14.72.127/")
+photos.push(a.replace("http://localhost:15130/", "http://1.14.72.127/"))
+ fileList.value.push({
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: a.replace("http://localhost:15130/", "http://1.14.72.127/")
+      })
+  // const formdata = new FormData()
+  // for (const k in file) {
+  //    formdata.append(file, file[file])
+  // }
+  // console.log(a, "sss")
   // console.log(file, "xxx")
   // const reader = new FileReader()
   // console.log(URL.createObjectURL(file as Blob))
@@ -436,21 +448,24 @@ const onSubmit = async () => {
       // onloadForm.value.name = formState.value.name
   // 上传表单
   // getForms()
-  useForms.addforms(JSON.parse(JSON.stringify(formState.value)))
+        const StringPhotos = photos.join()
+        console.log(StringPhotos)
+        formState.value.groundFeatureUrl = StringPhotos
+      useForms.addforms(JSON.parse(JSON.stringify(formState.value)))
       // useForms.addforms(onloadForm)
-      console.log("-----------  -1", deepMerge({}, toRaw(formState.value)))
+      // console.log("-----------  -1", deepMerge({}, toRaw(formState.value)))
 
-      datasall.push("-------0", JSON.parse(JSON.stringify(formState.value)))
+      // datasall.push("-------0", JSON.parse(JSON.stringify(formState.value)))
       // console.log(toRaw(ref({ a: 1, b: { c: 2, b: 2 } }).value), "test")
       // console.log({ ...toRaw(formState.value) })
       // const o = { ...toRaw(formState.value) }
       const o = JSON.parse(JSON.stringify(formState.value))
       useForm.AddData(o)
-      console.log("------1", o)
+      // console.log("------1", o)
       // console.log("------2", { ...formState.value })
 
       datasall.push(o)
-      console.log(datasall, "olkk")
+      // console.log(datasall, "olkk")
       // console.log(datasall[0], "datasall")
       // datastable.value.push({ ID: formState.value.ID, name: formState.value.name, age: 2 })
       // useForm.findData({ ID: formState.value.ID, name: formState.value.name, age: 2 })
@@ -501,8 +516,10 @@ console.log(tabledatas, "tabledatas")
   }
 })
 const finish = () => {
-  console.log("nihao")
+  alert("nihao")
+  console.log("nihaoa-----------")
 }
+// 重置表单
 const resetForm = () => {
   formRef.value.resetFields()
   visible.value = false

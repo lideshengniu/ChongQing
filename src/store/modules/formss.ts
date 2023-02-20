@@ -28,8 +28,9 @@ async deleteforms(id) {
   return Alldata
 },
 async addphote(file) {
+  console.log("aaaa")
   const Alldata = await addPhoto(file)
-
+  return Alldata
 }
 }
 })

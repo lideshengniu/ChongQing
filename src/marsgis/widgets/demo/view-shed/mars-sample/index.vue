@@ -82,7 +82,7 @@
   <div class="f-mb data-list">
     <mars-table
       size="small"
-      v-if="formState.hasTable"
+      v-if="true"
       :pagination="{ pageSize: currentPage }"
       :customRow="graphicCustomRowObj"
       :row-selection="graphicRowSelection"

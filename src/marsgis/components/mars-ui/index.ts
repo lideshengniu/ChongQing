@@ -13,6 +13,7 @@ import MarsInputGroup from "./mars-input-group/index.vue"
 import MarsDatePicker from "./mars-date-picker/index.vue"
 import MarsRangePicker from "./mars-range-picker/index.vue"
 import MarsColorPicker from "./mars-color-picker"
+import MarsColor from "./mars-color/index.vue"
 import MarsIcon from "./mars-icon/index.vue"
 import MarsSwitch from "./mars-switch/index.vue"
 import MarsDialog from "./mars-dialog/index.vue"
@@ -20,7 +21,8 @@ import MarsSlider from "./mars-slider/index.vue"
 import MarsPannel from "./mars-pannel/index.vue"
 import MarsDropDown from "./mars-dropdown"
 import MarsGui from "./mars-gui/index.vue"
-import MarsXuan from "./mars-xuan/index.vue"
+import MarsTable from "./mars-table/index.vue"
+
 import MarsMessage, { $message as marsMessage } from "./mars-message"
 import MarsAlert, { $alert as marsAlert } from "./mars-alert/"
 import MarsNotify, { $notify as marsNotify } from "./mars-notify"
@@ -65,7 +67,7 @@ import {
 } from "ant-design-vue"
 
 import "./mars-echarts"
-
+import "./themes"
 import "./index.less"
 import "./function.less"
 
@@ -93,7 +95,8 @@ const components = [
   MarsSwitch,
   MarsSlider,
   MarsGui,
-  MarsXuan
+  MarsTable,
+  MarsColor
 ]
 
 let marsUIConfig: Record<string, any>
@@ -138,6 +141,7 @@ export default function (app: App, config: Record<string, any> = {}): App {
   app.use(Card)
   app.use(Image)
   app.use(Pagination)
+  app.use(Table)
   app.use(Empty)
 
   components.forEach((comp) => {

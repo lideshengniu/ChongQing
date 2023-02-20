@@ -34,5 +34,5 @@ export const $alert = (content: any, title = "提示", type: keyof typeof Modal 
   }
 }
 export default function (app: App): void {
-  app.config.globalProperties.$alert = $alert as any
+  app.config.globalProperties.$alert = $alert
 }
