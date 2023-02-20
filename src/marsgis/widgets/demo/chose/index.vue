@@ -1,6 +1,7 @@
 <template>
-  <mars-pannel :visible="true" left="500" top="15" width="350px">
+  <mars-dialog :visible="true" left="500" top="15" width="450px" title="数据分析">
     <a-space irection="horizontal">
+      <span class="mars-pannel-item-label">视域分析:</span>
       <mars-button @click="Intervisibility()">通视分析</mars-button>
       <mars-button @click="openviewshed()">可视域分析</mars-button>
       <!-- <mars-button @click="3">清除</mars-button> -->
@@ -33,7 +34,7 @@
         <mars-button @click="expJSONFile" title="导出构造参数Json"> 导出构造JSON </mars-button>
       </a-space>
     </div>
-  </mars-pannel>
+  </mars-dialog>
 
   <!-- <location-to /> -->
 </template>

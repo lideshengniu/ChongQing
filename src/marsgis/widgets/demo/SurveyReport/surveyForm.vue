@@ -39,7 +39,7 @@
         <a-row :size="size" type="flex" justify="center" :gutter="[15, 16]" style="height: 70px"
           ><a-col :span="8">
             <a-form-item label="变形破坏的建构筑物" :name="['groundFeature', 'anomalous']"
-              ><a-input style="width: 200px" v-model:value="formState. groundFeature.anomalous" /></a-form-item></a-col
+              ><a-input style="width: 200px" v-model:value="formState.groundFeature.anomalous" /></a-form-item></a-col
         ></a-row>
         <a-row :size="size" type="flex" justify="space-around" :gutter="[0, 16]" style="height: 50px">
           <a-col :span="8"
@@ -193,6 +193,7 @@ import { useWidget } from "@mars/common/store/widget"
 import { any } from "vue-types"
 import useStore from "@/store"
 import { AllForm } from "@/api/types/prospecting"
+import { queryForms } from "@/api/prospecting"
 const { activate, disable, isActivate, updateWidget, currentWidget } = useWidget()
 const visible: Ref<boolean> = ref(false)
 const { useForm, useForms } = useStore()
@@ -477,18 +478,26 @@ const onSubmit = async () => {
   // props.data.push()
   console.log(1)
 }
-currentWidget.onUpdate(({ show, ID }) => {
+// 修改
+// async function query(id) {
+//    const tabledatas = await queryForms(id)
+// }
+ currentWidget.onUpdate(async ({ id, show }) => {
   visible.value = show
-  console.log(ID, "IDSSS")
-  if (ID || ID === 0) {
-    console.log(
-      datasall.find((item) => item.ID === ID),
-      "datasall.find((item) => item.ID === ID)"
-    )
-    const Data = { ...datasall.find((item) => item.ID === ID) }
-    const Data2 = { ...useForm.form.find((item) => item.ID === ID) }
-    console.log(Data2, "dadddd")
-    formState.value = { ...Data2 }
+console.log(id, "id")
+
+
+  // console.log(await queryForms(id), "IDSSS")
+  if (id || id === 0) {
+    const tabledatas = await queryForms(id)
+
+delete tabledatas.id
+console.log(tabledatas, "tabledatas")
+    // console.log(tabledatas, "tabledatas")
+    // const Data = { ...datasall.find((item) => item.id === id) }
+    // const Data2 = { ...useForm.form.find((item) => item.id === ID) }
+    // console.log(Data2, "dadddd")
+    formState.value = tabledatas
   }
 })
 const finish = () => {
@@ -506,8 +515,12 @@ export default {
 </script>
 <style scoped lang="less">
 .ss {
+
   width: 100%;
   // background-color: red;
   height: 100%;
 }
+:deep(.ant-button){
+    background: rgba(18, 127, 224, .93);
+  }
 </style>

@@ -8,7 +8,7 @@ export const getForms = () => {
 export const queryForms = (id) => {
 return request({
   method: "POST",
-  url: "/form/all",
+  url: "/form/find",
   data: { id }
 })
 }

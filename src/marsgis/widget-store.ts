@@ -6,7 +6,7 @@
 import { defineAsyncComponent, markRaw } from "vue"
 import { WidgetState } from "@mars/common/store/widget"
 import { StoreOptions } from "vuex"
-
+import FunctionModule from "./WidgetModule/function"
 const store: StoreOptions<WidgetState> = {
   state: {
     widgets: [
@@ -95,9 +95,9 @@ const store: StoreOptions<WidgetState> = {
         name: "RemoteExploration"
         // group: "chose"
         // "Intervisibility", "viewshed"
-      }
+      }, ...FunctionModule
     ],
-    openAtStart: ["query-poi", "toolbar", "measure", "chose", "surveyForm", "RemoteExploration"]
+    openAtStart: ["query-poi", "toolbar", "surveyForm", "FunctionAll"]
   }
 }
 

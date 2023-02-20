@@ -1,13 +1,19 @@
 <template>
-  <mars-dialog class="mainss" title="我的弹窗" width="670" right="500" top="40" bottom="400" v-bind="attrs" :visible="visible">
+  <mars-dialog class="mainss" title="我的弹窗" width="750" right="500" top="40" bottom="400" v-bind="attrs" :visible="visible">
     <a-card title="添加信息" style="width: auto; opacity: 0.9">
       <template #extra> <mars-button class="small-btn" @click="addForm()">添加</mars-button></template>
     </a-card>
     <a-card>
       <a-table :columns="columns" :data-source="TableDatas">
         <template v-slot:bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'action'"> <mars-button class="small-btn" @click="showForm(record)">操作</mars-button>
-            <mars-button class="small-btn" @click="handleExportExcel(record)"> 导出表格</mars-button></template>
+          <template v-if="column.dataIndex == 'action'">
+            <a-space direction="horizontal" style="width:150px">
+             <mars-button class="small-btn" @click="showForm(record)">修改</mars-button>
+            <mars-button class="small-btn" @click="handleExportExcel(record)"> 导出表格</mars-button>
+            <mars-button class="small-btn" @click="deleteForm(record)"> 删除</mars-button>
+          </a-space>
+
+          </template>
         </template>
       </a-table></a-card
     >
@@ -26,9 +32,12 @@ import { useWidget } from "@mars/common/store/widget"
 import surveryForm from "./surveyForm.vue"
 // import { useForm } from "/store/index"
 // 表格
+import { deleteForms } from "@/api/prospecting"
 import useStore from "@/store"
-import { jsonToExcel } from "@mars/utils/export-to-excel"
+import { jsonToExcel } from "@/utils/export-to-excel"
 import { destroyObject } from "mars3d-cesium"
+// import useStore from '@/store'
+
 const attrs = useAttrs()
 const { useForm, useForms } = useStore()
 // 获得 表单
@@ -52,17 +61,25 @@ const consoleS = (xx) => {
 }
 const formVisible = ref(true)
 const columns = [
-  // { title: "唯一标识", width: 100, dataIndex: "ID", key: "ID" },
+  { title: "唯一标识", width: 100, dataIndex: "id", key: "id" },
   { title: "名称", width: 100, dataIndex: "name", key: "name" },
   { title: "类型", width: 100, dataIndex: "type", key: "type" },
   {
-    title: "操作",
+    title: "操作1",
     width: 100,
     dataIndex: "action",
     key: "action"
 
     // slots: { customRender: "action" }
   }
+  // {
+  //   title: "操作2",
+  //   width: 100,
+  //   dataIndex: "action",
+  //   key: "action"
+
+  //   // slots: { customRender: "action" }
+  // }
 ]
 const datas = ref([
   // {
@@ -120,9 +137,9 @@ onMounted(() => {
 })
 const showForm = (record) => {
   // visible.value = false
-  console.log(record.ID, "ID")
+  console.log(record.id, "ID")
   // activate("surveyForm")
-  updateWidget("surveyForm", { ID: record.ID, show: true })
+  updateWidget("surveyForm", { id: record.id, show: true })
   // adminId.value = record.ID
 }
 const addForm = () => {
@@ -130,57 +147,69 @@ const addForm = () => {
   // visible.value = false
   updateWidget("surveyForm", { show: true })
 }
-const handleExportExcel = (record) => {
-  try {
-    console.log(record, "ss")
-    const ID = record.ID
-    const Data = { ...useForm.form.find((item) => item.ID === ID) }
-    console.log(Data, "datass")
+// 导出
+const handleExportExcel = async (record) => {
+  // try {
+    console.log(record, "ss/////////")
+    // const ID = record.ID
+    const Data = await useForms.queryforms(record.id)
+    console.log(Data, "datass22//")
     // const { jsonToExcel } = await import("@mars/utils/export-to-excel")
     jsonToExcel({
       data: Data,
       header: {
-        ID: "编号",
+        id: "编号",
         name: "名称",
         type: "类型",
-        location: "地理位置",
-        longitude: "中心精度",
-        latitude: "中心维度",
-        photo: "地物信息(全局)",
-        destroyed: "变形破坏的建构筑物",
-        slopeprotection: "人工护坡",
-        Terrace: "梯田",
-        firstslope: "第一坡度",
-        otherslope: "多种坡度",
-        firstslopeaspect: "单一坡向",
-        otherslopeaspect: "多种坡向",
-        snootelevation: "前缘高程",
-        Trailingedgeelevation: "后缘高程",
-        snootwidth: "前缘宽度",
-        Trailingedgewidth: "后缘宽度",
-        elevationdifference: "前后缘高度差",
+        geographicInfo: "地理位置",
+        centerLongitude: "中心精度",
+        centerLatitude: "中心维度",
+        groundFeatureUrl: "地物信息(全局)",
+        artificial: "变形破坏的建构筑物",
+        anomalous: "人工护坡",
+        terrace: "梯田",
+        slope: "第一坡度",
+        multipleSlopes: "多种坡度",
+        singleAspect: "单一坡向",
+        multipleSlopeDirections: "多种坡向",
+        frontHeight: "前缘高程",
+        rearHeight: "后缘高程",
+        frontWidth: "前缘宽度",
+        rearWidth: "后缘宽度",
+        diff: "前后缘高度差",
         area: "面积",
-        nwlongitude: "西北(经度)",
-        nwdimension: "西北(维度)",
-        nwelevation: "西北(高程)",
-        nelongitude: "东北(经度)",
-        nedimension: "东北(维度)",
-        neelevation: "东北(高程)",
-        swlongitude: "西南(经度)",
-        swdimension: "西南(维度)",
-        swelevation: "西南(高程)",
-        selongitude: "东南(经度)",
-        sedimension: "东南(维度)",
-        seelevation: "东南(高程)",
-        geologicalenvironment: "地质环境条件"
+        northwestCornerlongitude: "西北(经度)",
+        northwestCornerlatitude: "西北(维度)",
+        northwestCornerheight: "西北(高程)",
+        //
+        northeastCornerlongitude: "东北(经度)",
+        northeastCornerlatitude: "东北(维度)",
+        northeastCornerheight: "东北(高程)",
+        //
+        southwestCornerlongitude: "西南(经度)",
+        southwestCornerlatitude: "西南(维度)",
+        southwestCornerheight: "西南(高程)",
+        //
+        southeastCornerlongitude: "东南(经度)",
+        southeastCornerlatitude: "东南(维度)",
+        southeastCornerheight: "东南(高程)",
+        geology: "地质环境条件",
+        fileUrl: "kml/ovobj"
       },
       fileName: "测试.xlsx",
       bookType: "xlsx"
     })
-  } catch (err) {
-    console.error(err)
-  }
+  // } catch (err) {
+  //   console.error(err, "nimeinimienimei")
+  // }
 
+}
+// 删除
+const deleteForm = async (record) => {
+  deleteForms(record.id)
+  const datas = await useForms.getform()
+  datas.value = datas
+  console.log(datas, "datas")
 }
 </script>
 <script lang="ts">

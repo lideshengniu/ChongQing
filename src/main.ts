@@ -1,9 +1,9 @@
 import { createApp } from "vue"
-import "./styles/index.less"
+
 import App from "./App.vue"
 // import { store } from "@/store"
 import router from "./router"
-import "element-plus/dist/index.css"
+// import "element-plus/dist/index.css"
 import store from "@mars/widget-store"
 // import { injectState, key } from "@mars/common/store/widget"
 import "nprogress/nprogress.css"
@@ -15,6 +15,7 @@ import "virtual:svg-icons-register"
 import { createPinia } from "pinia"
 import { injectState, key } from "@mars/common/store/widget"
 import MarsUIInstall from "./marsgis/install/index"
+import "./styles/index.less"
 // import MarsUIInstall from "./marsgis/install/index"
 NProgress.configure({
   easing: "ease", // 动画方式

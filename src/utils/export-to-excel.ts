@@ -30,23 +30,16 @@ export const jsonToExcel = (options:{
     header:Record<string, string>
     fileName:string
     bookType:xlsx.BookType
-}) => { // 1、创建一个工作簿 workbook
+}) => { // 1、创建一个工作簿 workbook\
+  console.log(1111111111111111)
   const wb = xlsx.utils.book_new()
   // 2、创建工作表 worksheet
-
   if (options.header) {
-
-    console.log(options, "pp")
-    // options.data = options.data.map(item => {
-      // const obj: Record<string, any> = {}
-
-const o = JSON.parse(JSON.stringify(options.data))
-   console.log(o, "obj1")
+    console.log(options, "pps")
+    const o = JSON.parse(JSON.stringify(options.data))
+    console.log(o, "obj1")
     const src = deepMerge(o)
-    console.log(src, "obj1")
-      // return obj
-
-    // })
+    console.log(src, "obj1===")
     const obj: Record<string, any> = {}
     for (const key in options.header) {
       if (options.header[key]) {

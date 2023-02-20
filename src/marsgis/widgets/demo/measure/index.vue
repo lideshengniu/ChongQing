@@ -1,5 +1,5 @@
 <template>
-  <mars-dialog :visible="true" left="10" top="80">
+  <mars-dialog :visible="true" left="170" top="70" width="350" title="基本功能">
     <div class="f-mb">
       <a-space>
         <mars-button @click="clear">清除</mars-button>

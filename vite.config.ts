@@ -32,7 +32,7 @@ export default ({ mode }: ConfigEnv) => {
     server: {
       host: "localhost",
       https: false,
-      port: 3002,
+      port: 3008,
       proxy: {
         "/test": {
           target: "http://124.221.236.190:9001/geoserver/wfs",
