@@ -1,0 +1,1 @@
+import"./index.3e972bdf.js";function e(e){return/^-?((0|1?[0-7]?[0-9]?)(([.][0-9]*)?)|180(([.][0]*)?)),-?((0|[1-8]?[0-9]?)(([.][0-9]*)?)|90(([.][0]*)?))$/.test(e)}function n(e){return new URL(window.location.href).searchParams.get(e)}export{n as g,e as i};

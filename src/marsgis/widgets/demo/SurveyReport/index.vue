@@ -1,5 +1,6 @@
 <template>
-  <mars-dialog class="mainss" title="我的弹窗" width="750" right="500" top="40" bottom="400" v-bind="attrs" :visible="visible">
+  <mars-dialog class="mainss" title="我的弹窗" width="750" right="500" top="40" bottom="400" v-bind="attrs"
+    :visible="visible">
     <a-card title="添加信息" style="width: auto; opacity: 0.9">
       <template #extra> <mars-button class="small-btn" @click="addForm()">添加</mars-button></template>
     </a-card>
@@ -8,15 +9,18 @@
         <template v-slot:bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'action'">
             <a-space direction="horizontal" style="width:150px">
-             <mars-button class="small-btn" @click="showForm(record)">修改</mars-button>
-            <mars-button class="small-btn" @click="handleExportExcel(record)"> 导出表格</mars-button>
-            <mars-button class="small-btn" @click="deleteForm(record)"> 删除</mars-button>
-          </a-space>
+              <mars-button class="small-btn" @click="showForm(record)">修改</mars-button>
+              <mars-button class="small-btn" @click="handleExportExcel(record)"> 导出表格</mars-button>
+              <mars-button class="small-btn" @click="deleteForm(record)"> 删除</mars-button>
+              <a-modal ref="alertModal" title="是否删除" v-model:visible="visibleAlert" :confirm-loading="confirmLoading" @ok="handleOk(record)" >
+             <p>{{ modalText }}</p>
+    </a-modal>
+            </a-space>
 
           </template>
         </template>
-      </a-table></a-card
-    >
+      </a-table></a-card>
+
   </mars-dialog>
   <!-- <mars-dialog v-bind="attrs" :visible="visible" title="我的弹窗" width="800" right="350" top="10" bottom="40" :closeable="false"
     ><surveryForm class="Forms" v-model:data="data" @show="show" v-model:admin-id="adminId">nihao</surveryForm></mars-dialog
@@ -36,7 +40,27 @@ import { deleteForms } from "@/api/prospecting"
 import useStore from "@/store"
 import { jsonToExcel } from "@/utils/export-to-excel"
 import { destroyObject } from "mars3d-cesium"
+import type{ ModalProps } from "node_modules/ant-design-vue/lib/modal/index"
 // import useStore from '@/store'
+const visibleAlert = ref<boolean>(false)
+const confirmLoading = ref<boolean>(false)
+const modalText = ref<string>("Content of the modal")
+const alertModal = ref()
+const handleOk = async(record) => {
+   modalText.value = "The modal will be closed after two seconds"
+
+   confirmLoading.value = true
+   deleteForms(record.id)
+
+  //   formLoading.value = false
+  const datas = await useForms.getform().finally(() => {
+    visibleAlert.value = false
+    confirmLoading.value = false
+  })
+  datas.value = datas
+
+}
+// 确认删除
 
 const attrs = useAttrs()
 const { useForm, useForms } = useStore()
@@ -72,14 +96,6 @@ const columns = [
 
     // slots: { customRender: "action" }
   }
-  // {
-  //   title: "操作2",
-  //   width: 100,
-  //   dataIndex: "action",
-  //   key: "action"
-
-  //   // slots: { customRender: "action" }
-  // }
 ]
 const datas = ref([
   // {
@@ -145,71 +161,77 @@ const showForm = (record) => {
 const addForm = () => {
   // activate("surveyForm")
   // visible.value = false
-  updateWidget("surveyForm", { show: true })
+  updateWidget("surveyForm", { show: true, id: undefined })
 }
 // 导出
 const handleExportExcel = async (record) => {
   // try {
-    console.log(record, "ss/////////")
-    // const ID = record.ID
-    const Data = await useForms.queryforms(record.id)
-    console.log(Data, "datass22//")
-    // const { jsonToExcel } = await import("@mars/utils/export-to-excel")
-    jsonToExcel({
-      data: Data,
-      header: {
-        id: "编号",
-        name: "名称",
-        type: "类型",
-        geographicInfo: "地理位置",
-        centerLongitude: "中心精度",
-        centerLatitude: "中心维度",
-        groundFeatureUrl: "地物信息(全局)",
-        artificial: "变形破坏的建构筑物",
-        anomalous: "人工护坡",
-        terrace: "梯田",
-        slope: "第一坡度",
-        multipleSlopes: "多种坡度",
-        singleAspect: "单一坡向",
-        multipleSlopeDirections: "多种坡向",
-        frontHeight: "前缘高程",
-        rearHeight: "后缘高程",
-        frontWidth: "前缘宽度",
-        rearWidth: "后缘宽度",
-        diff: "前后缘高度差",
-        area: "面积",
-        northwestCornerlongitude: "西北(经度)",
-        northwestCornerlatitude: "西北(维度)",
-        northwestCornerheight: "西北(高程)",
-        //
-        northeastCornerlongitude: "东北(经度)",
-        northeastCornerlatitude: "东北(维度)",
-        northeastCornerheight: "东北(高程)",
-        //
-        southwestCornerlongitude: "西南(经度)",
-        southwestCornerlatitude: "西南(维度)",
-        southwestCornerheight: "西南(高程)",
-        //
-        southeastCornerlongitude: "东南(经度)",
-        southeastCornerlatitude: "东南(维度)",
-        southeastCornerheight: "东南(高程)",
-        geology: "地质环境条件",
-        fileUrl: "kml/ovobj"
-      },
-      fileName: "测试.xlsx",
-      bookType: "xlsx"
-    })
+  console.log(record, "ss/////////")
+  // const ID = record.ID
+  const Data = await useForms.queryforms(record.id)
+  console.log(Data, "datass22//")
+  // const { jsonToExcel } = await import("@mars/utils/export-to-excel")
+  jsonToExcel({
+    data: Data,
+    header: {
+      id: "编号",
+      name: "名称",
+      type: "类型",
+      geographicInfo: "地理位置",
+      centerLongitude: "中心精度",
+      centerLatitude: "中心维度",
+      groundFeatureUrl: "地物信息(全局)",
+      artificial: "变形破坏的建构筑物",
+      anomalous: "人工护坡",
+      terrace: "梯田",
+      slope: "第一坡度",
+      multipleSlopes: "多种坡度",
+      singleAspect: "单一坡向",
+      multipleSlopeDirections: "多种坡向",
+      frontHeight: "前缘高程",
+      rearHeight: "后缘高程",
+      frontWidth: "前缘宽度",
+      rearWidth: "后缘宽度",
+      diff: "前后缘高度差",
+      area: "面积",
+      northwestCornerlongitude: "西北(经度)",
+      northwestCornerlatitude: "西北(维度)",
+      northwestCornerheight: "西北(高程)",
+      //
+      northeastCornerlongitude: "东北(经度)",
+      northeastCornerlatitude: "东北(维度)",
+      northeastCornerheight: "东北(高程)",
+      //
+      southwestCornerlongitude: "西南(经度)",
+      southwestCornerlatitude: "西南(维度)",
+      southwestCornerheight: "西南(高程)",
+      //
+      southeastCornerlongitude: "东南(经度)",
+      southeastCornerlatitude: "东南(维度)",
+      southeastCornerheight: "东南(高程)",
+      geology: "地质环境条件",
+      fileUrl: "kml/ovobj"
+    },
+    fileName: "测试.xlsx",
+    bookType: "xlsx"
+  })
   // } catch (err) {
   //   console.error(err, "nimeinimienimei")
   // }
 
 }
 // 删除
+
 const deleteForm = async (record) => {
-  deleteForms(record.id)
-  const datas = await useForms.getform()
-  datas.value = datas
-  console.log(datas, "datas")
+
+  visibleAlert.value = true
+  // alertModal.value.bodyStyle = { }
+  console.log(alertModal.value, "@@@@@@@")
+  // deleteForms(record.id)
+  // //   formLoading.value = false
+  // const datas = await useForms.getform()
+  // datas.value = datas
+  // console.log(datas, "datas")
 }
 </script>
 <script lang="ts">
@@ -220,6 +242,7 @@ export default {
 <style lang="less">
 .mainss {
   position: relative;
+
   .Forms {
     position: absolute;
     width: 500px;

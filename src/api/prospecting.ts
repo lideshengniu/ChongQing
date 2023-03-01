@@ -42,3 +42,11 @@ export const addPhoto = (data) => {
     data: formdata
   })
 }
+export const updata = (data) => {
+  return request({
+    method: "POST",
+    url: "/form/update",
+
+    data: data
+  })
+}

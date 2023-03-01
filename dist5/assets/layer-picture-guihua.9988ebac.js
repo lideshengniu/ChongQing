@@ -1,0 +1,1 @@
+import{_ as a,a as s,b as e,a3 as r,a4 as t,d as c}from"./index.3e972bdf.js";const d={},i={class:"layer-pictrue"},u=[(a=>(r("data-v-0e72ca38"),a=a(),t(),a))((()=>c("img",{class:"layer-picture_img",src:"/assets/guihua.ba2979fa.jpg"},null,-1)))];var l=a(d,[["render",function(a,r){return s(),e("div",i,u)}],["__scopeId","data-v-0e72ca38"]]);export{l as default};

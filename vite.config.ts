@@ -23,7 +23,7 @@ export default ({ mode }: ConfigEnv) => {
   const root = process.cwd()
 
   const ENV = loadEnv(mode, root)
-
+ console.log(ENV)
   console.log(`当前环境信息：`, mode)
   console.log(`ENV：`, ENV)
 
@@ -38,12 +38,12 @@ export default ({ mode }: ConfigEnv) => {
           target: "http://124.221.236.190:9001/geoserver/wfs",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/test/, "")
-        },
-        "/form": {
-          target: "http://1.14.72.127/",
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/test/, "")
         }
+        // "/forms": {
+        //   target: "http://1.14.72.127",
+        //   changeOrigin: true,
+        //   rewrite: (path) => path.replace(/^\/forms/, "")
+        // }
       }
     },
     define: {

@@ -1,0 +1,1 @@
+import{_ as a,a as s,b as d,a3 as e,a4 as r,d as t}from"./index.3e972bdf.js";const c={},i={class:"layer-pictrue"},n=[(a=>(e("data-v-22746ddd"),a=a(),r(),a))((()=>t("img",{class:"layer-picture_img",src:"/assets/heatmap.59e4898a.png"},null,-1)))];var l=a(c,[["render",function(a,e){return s(),d("div",i,n)}],["__scopeId","data-v-22746ddd"]]);export{l as default};

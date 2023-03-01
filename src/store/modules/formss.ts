@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import { getForms, queryForms, addForms, deleteForms, addPhoto } from "@/api/prospecting"
+import { getForms, queryForms, addForms, deleteForms, addPhoto, updata } from "@/api/prospecting"
 export default defineStore("prospecting", {
   state: () => {
     return {
@@ -30,6 +30,11 @@ async deleteforms(id) {
 async addphote(file) {
   console.log("aaaa")
   const Alldata = await addPhoto(file)
+  return Alldata
+},
+async updatas(data) {
+  console.log("aaaa")
+  const Alldata = await updata(data)
   return Alldata
 }
 }

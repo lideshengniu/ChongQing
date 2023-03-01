@@ -58,7 +58,13 @@
           ></a-col>
           <a-col :span="8"
             ><a-form-item label="多种坡度" :name="['slopeInfo', 'multipleSlopes']"
-              ><a-input style="width: 140px" v-model:value="formState.slopeInfo.multipleSlopes" /></a-form-item></a-col></a-row
+              ><a-upload
+              list-type="picture" :file-list="multipleSlopes" @remove="handleRemultipleSlopes" :before-upload="beforeslopesUpload"
+  >  <a-button>
+      <upload-outlined></upload-outlined>
+      Click to Upload
+    </a-button>
+  </a-upload></a-form-item></a-col></a-row
       ></a-form-item>
       <a-form-item label="坡向(°)">
         <a-row :size="size" type="flex" justify="center" :gutter="[0, 16]"
@@ -68,7 +74,18 @@
           ></a-col>
           <a-col :span="8"
             ><a-form-item label="多种坡向" :name="['slopeInfo', 'multipleSlopeDirections']"
-              ><a-input style="width: 140px" v-model:value="formState.slopeInfo.multipleSlopeDirections" /></a-form-item
+              >
+              <!-- <a-input style="width: 140px" v-model:value="formState.slopeInfo.multipleSlopeDirections" /> -->
+              <a-upload
+              list-type="picture" :file-list="allaspect" @remove=" handleRemoveallaspect" :before-upload="beforeaspectUpload"
+  >
+    <a-button>
+      <upload-outlined></upload-outlined>
+      Click to Upload
+    </a-button>
+  </a-upload>
+
+              </a-form-item
           ></a-col> </a-row
       ></a-form-item>
       <a-form-item label="范围">
@@ -178,7 +195,10 @@
       /></a-form-item>
       <a-form-item label="kml" name="fileUrl" :wrapper-col="{ span: 5, offset: 5 }"
         ><a-input style="width: 350px" v-model:value="formState.coordinate.fileUrl"
-      /></a-form-item>
+      />
+      <a-upload></a-upload>
+
+    </a-form-item>
       <a-form-item :wrapper-col="{ span: 14, offset: 10 }">
         <a-button type="primary" @click="onSubmit">Create</a-button>
         <a-button style="margin-left: 10px" @click="resetForm">Cancel</a-button>
@@ -241,6 +261,7 @@ interface FileItem {
 // : Ref<FormState>
 const formState = ref({
   name: "0",
+  id: "" || undefined,
   // ID: undefined,
   type: "0",
   geographicInfo: "", // 位置信息
@@ -392,19 +413,8 @@ photos.push(a.replace("http://localhost:15130/", "http://1.14.72.127/"))
         status: "done",
         url: a.replace("http://localhost:15130/", "http://1.14.72.127/")
       })
-  // const formdata = new FormData()
-  // for (const k in file) {
-  //    formdata.append(file, file[file])
-  // }
-  // console.log(a, "sss")
-  // console.log(file, "xxx")
-  // const reader = new FileReader()
-  // console.log(URL.createObjectURL(file as Blob))
-  // reader.readAsDataURL(file)
-  // reader.onload = function (e) {
-  //   console.log(e.target)
-  //   // console.log(btoa("jasss"))
-  // }
+
+
   return false
 }
 const handleRemove = (file: FileItem) => {
@@ -443,15 +453,18 @@ const onSubmit = async () => {
     .validate()
     .then(() => {
       console.log(">>>>>>>>>>>>>>>")
-      // formState.value.ID = ID.value++
-      const onloadForm:Ref< AllForm> = ref<AllForm>()
-      // onloadForm.value.name = formState.value.name
-  // 上传表单
-  // getForms()
+
+
+
         const StringPhotos = photos.join()
         console.log(StringPhotos)
         formState.value.groundFeatureUrl = StringPhotos
-      useForms.addforms(JSON.parse(JSON.stringify(formState.value)))
+
+      if (formState.value.id) {
+        useForms.updatas(JSON.parse(JSON.stringify(formState.value)))
+      } else {
+        useForms.addforms(JSON.parse(JSON.stringify(formState.value)))
+      }
       // useForms.addforms(onloadForm)
       // console.log("-----------  -1", deepMerge({}, toRaw(formState.value)))
 
@@ -499,25 +512,164 @@ const onSubmit = async () => {
 // }
  currentWidget.onUpdate(async ({ id, show }) => {
   visible.value = show
-console.log(id, "id")
-
-
+    console.log(id, "id")
   // console.log(await queryForms(id), "IDSSS")
-  if (id || id === 0) {
+    if (id || id === 0) {
     const tabledatas = await queryForms(id)
+    fileList.value = [{
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: tabledatas.groundFeatureUrl
+      }]
 
-delete tabledatas.id
-console.log(tabledatas, "tabledatas")
-    // console.log(tabledatas, "tabledatas")
-    // const Data = { ...datasall.find((item) => item.id === id) }
-    // const Data2 = { ...useForm.form.find((item) => item.id === ID) }
-    // console.log(Data2, "dadddd")
+
+    multipleSlopes.value = [{
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: tabledatas.slopeInfo.multipleSlopes
+      }]
+      allaspect.value = [{
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: tabledatas.slopeInfo.multipleSlopeDirections
+      }]
+
+    // delete tabledatas.id
+    console.log(tabledatas, "tabledatas")
     formState.value = tabledatas
+
+  } else {
+
+    fileList.value = []
+    multipleSlopes.value = []
+    allaspect.value = []
+
+    formState.value = {
+  name: "0",
+  id: "" || undefined,
+  // ID: undefined,
+  type: "0",
+  geographicInfo: "", // 位置信息
+  centerLongitude: 0, // 中心经度
+  centerLatitude: 0, // 中心维度
+  groundFeatureUrl: "",
+  groundFeature: { // 地物信息(单独地物)
+    artificial: "0", // 人工护坡
+    anomalous: "0", // 被破坏的
+    terrace: "0" // 梯田
+  },
+  slopeInfo: {
+    slope: "0", // 单一坡度
+    multipleSlopes: "0", // 多种坡度
+    singleAspect: "0", // 单一坡向
+    multipleSlopeDirections: "0"// 多种坡向
+  },
+  range: {
+    frontHeight: 0, // 前缘高程
+    rearHeight: 0, // 后缘高程
+    frontWidth: 0, // 前缘宽度
+    rearWidth: 0, // 后缘宽度
+    diff: 0, // 前后缘高程差
+    area: 0 // 范围
+  },
+  coordinate: {
+
+    northwestCorner: {
+      longitude: "0",
+      latitude: "0",
+      height: "0"
+},
+northeastCorner: {
+      longitude: "0",
+      latitude: "0",
+      height: "0"
+},
+southwestCorner: {
+      longitude: "0",
+      latitude: "0",
+      height: "0"
+},
+  southeastCorner: {
+      longitude: "0",
+      latitude: "0",
+      height: "0"
+},
+
+    // northwestcorner: {
+    //   nwlongitude: 0, // 经度} //西北角
+    //   nwdimension: 0,
+    //   nwelevation: 0
+    // },
+    // northeastcorner: {
+    //   nelongitude: 0, // 经度} //西北角
+    //   nedimension: 0,
+    //   neelevation: 0
+    // },
+    // southwestcorner: {
+    //   swlongitude: 0, // 经度} //西北角
+    //   swdimension: 0,
+    //   swelevation: 0
+    // },
+    // southeastcorner: {
+    //   selongitude: 0, // 经度} //西北角
+    //   sedimension: 0,
+    //   seelevation: 0
+    // },
+    fileUrl: "0"// kml
+  },
+  geology: "0"
+}
   }
 })
 const finish = () => {
   alert("nihao")
   console.log("nihaoa-----------")
+}
+// 多方向
+const allaspect = ref([])
+const beforeaspectUpload = async (file) => {
+  console.log(file, "file")
+
+ const a:string = await useForms.addphote(file)
+ formState.value.slopeInfo.multipleSlopeDirections = a.replace("http://localhost:15130/", "http://1.14.72.127/")
+// photos.push(a.replace("http://localhost:15130/", "http://1.14.72.127/"))
+allaspect.value.push({
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: a.replace("http://localhost:15130/", "http://1.14.72.127/")
+      })
+
+
+  return false
+}
+const handleRemoveallaspect = (file: FileItem) => {
+  const index = allaspect.value.indexOf(file)
+  const newFileList = allaspect.value.slice()
+  newFileList.splice(index, 1)
+  allaspect.value = newFileList
+}
+// 多角度
+const multipleSlopes = ref([])
+const beforeslopesUpload = async(file) => {
+  const a:string = await useForms.addphote(file)
+ formState.value.slopeInfo.multipleSlopes = a.replace("http://localhost:15130/", "http://1.14.72.127/")
+// photos.push(a.replace("http://localhost:15130/", "http://1.14.72.127/"))
+multipleSlopes.value.push({
+        uid: "-1",
+        name: "xxx.png",
+        status: "done",
+        url: a.replace("http://localhost:15130/", "http://1.14.72.127/")
+      })
+}
+const handleRemultipleSlopes = (file: FileItem) => {
+  const index = multipleSlopes.value.indexOf(file)
+  const newFileList = multipleSlopes.value.slice()
+  newFileList.splice(index, 1)
+  multipleSlopes.value = newFileList
 }
 // 重置表单
 const resetForm = () => {
